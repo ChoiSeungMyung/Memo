@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Line</string>
+    <string name="action_delete_all">전체 삭제</string>
+
+    <!--    hint -->
+    <string name="memo_title_hint">Please enter a title</string>
+    <string name="memo_image_add_hint">Try adding images</string>
+    <string name="dialog_image_pick_hint">Please choose how to add images</string>
+
+    <!--    btn description-->
+    <string name="btn_take_picture">Take a picture</string>
+    <string name="btn_pick_gallery">Choose from Gallery</string>
+    <string name="btn_write_url">Enter Url</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_ok">OK</string>
+</resources>

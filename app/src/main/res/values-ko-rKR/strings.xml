@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Line</string>
+    <string name="action_delete_all">Delete All</string>
+
+    <!--    hint -->
+    <string name="memo_title_hint">제목을 입력해 주세요</string>
+    <string name="memo_image_add_hint">이미지를 추가해 보세요</string>
+    <string name="dialog_image_pick_hint">이미지 추가 방법을 선택해주세요</string>
+    <!--    btn description -->
+    <string name="btn_take_picture">사진 찍기</string>
+    <string name="btn_pick_gallery">사진첩에서 선택</string>
+    <string name="btn_write_url">Url로 입력</string>
+    <string name="btn_cancel">취소</string>
+    <string name="btn_ok">확인</string>
+</resources>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFFFF"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/imagePickHint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/font_24"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:text="@string/dialog_image_pick_hint"
+        android:textColor="@android:color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/btnTakePicture"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="@string/btn_take_picture"
+        android:textSize="@dimen/font_16"
+        android:textColor="@android:color/black"
+        android:gravity="center"
+        android:background="@drawable/bg_border"
+        android:layout_marginTop="@dimen/fix_32"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btnPickGallery"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imagePickHint"/>
+
+    <TextView
+        android:id="@+id/btnPickGallery"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="@string/btn_pick_gallery"
+        android:textColor="@android:color/black"
+        android:background="@drawable/bg_border"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/fix_16"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintBottom_toTopOf="@id/btnWriteUrl"
+        app:layout_constraintEnd_toEndOf="@id/btnTakePicture"
+        app:layout_constraintStart_toStartOf="@id/btnTakePicture"
+        app:layout_constraintTop_toBottomOf="@id/btnTakePicture" />
+
+    <EditText
+        android:id="@+id/btnWriteUrl"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:hint="@string/btn_write_url"
+        android:textColorHint="@android:color/black"
+        android:background="@drawable/bg_border"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/fix_16"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintStart_toStartOf="@id/btnPickGallery"
+        app:layout_constraintEnd_toEndOf="@id/btnPickGallery"
+        app:layout_constraintTop_toBottomOf="@id/btnPickGallery"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

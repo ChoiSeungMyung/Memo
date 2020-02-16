@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.MemoDetatilActivity">
+
+    <EditText
+        android:id="@+id/memoDetailTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_border"
+        android:hint="@string/memo_title_hint"
+        android:padding="@dimen/fix_2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/memoDetailImageWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_border"
+        app:layout_constraintTop_toBottomOf="@id/memoDetailTitle">
+
+    <TextView
+        android:id="@+id/tvMemoImageTitleHint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/memo_image_add_hint"
+        android:layout_marginTop="@dimen/fix_1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btnMemoImageAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_camera_add_30"
+        android:layout_marginTop="@dimen/fix_10"
+        android:layout_marginBottom="@dimen/fix_2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvMemoImageTitleHint"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:id="@+id/testImage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toEndOf="@id/btnMemoImageAdd"
+            app:layout_constraintTop_toTopOf="@id/btnMemoImageAdd"
+            app:layout_constraintBottom_toBottomOf="@id/btnMemoImageAdd"/>
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/memoImagesRecyclerView"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_marginStart="@dimen/fix_2"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/btnMemoImageAdd"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@id/btnMemoImageAdd"-->
+<!--        app:layout_constraintTop_toTopOf="@id/btnMemoImageAdd" />-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <EditText
+        android:id="@+id/memoDetailText"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_border"
+        app:layout_constraintBottom_toTopOf="@id/btnMemoCancel"
+        app:layout_constraintTop_toBottomOf="@id/memoDetailImageWrapper" />
+
+    <Button
+        android:id="@+id/btnMemoCancel"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/btn_64"
+        android:background="@drawable/bg_border"
+        android:text="@string/btn_cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.5" />
+
+    <Button
+        android:id="@+id/btnMemoOk"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/btn_64"
+        android:background="@drawable/bg_border"
+        android:text="@string/btn_ok"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btnMemoCancel"
+        app:layout_constraintWidth_percent="0.5" />
+</androidx.constraintlayout.widget.ConstraintLayout>
