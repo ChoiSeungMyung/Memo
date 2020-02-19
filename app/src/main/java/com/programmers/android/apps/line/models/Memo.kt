@@ -8,9 +8,9 @@ import com.programmers.android.apps.line.DB_TABLE_MEMO
 
 @Entity(tableName = DB_TABLE_MEMO)
 data class Memo(
-    val memoTitle: String,
-    val memoText: String,
-    val memoImages: List<String?> = listOf()
+    var memoTitle: String,
+    var memoText: String,
+    var memoImages: List<String?> = listOf()
 ) {
     @PrimaryKey(autoGenerate = true)
     var memoId: Int = 0

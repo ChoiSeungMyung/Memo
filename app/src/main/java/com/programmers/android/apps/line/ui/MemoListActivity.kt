@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,11 +14,9 @@ import com.programmers.android.apps.line.R
 import com.programmers.android.apps.line.adapters.MemoListAdapter
 import com.programmers.android.apps.line.adapters.viewholders.MemoItemClick
 import com.programmers.android.apps.line.extensions.loge
+import com.programmers.android.apps.line.utilities.PermissionUtil
 import com.programmers.android.apps.line.viewmodels.MemoViewModel
 import kotlinx.android.synthetic.main.activity_memo_list.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MemoListActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var memosViewModel: MemoViewModel
@@ -27,6 +26,13 @@ class MemoListActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_memo_list)
         setSupportActionBar(toolbar)
+
+        ActivityCompat.requestPermissions(
+            this,
+            PermissionUtil.REQUIRED_PERMISSIONS,
+            PermissionUtil.REQUEST_CODE_PERMISSIONS
+        )
+
         memosViewModel = ViewModelProvider(this).get(MemoViewModel::class.java)
 
         fab.setOnClickListener(this)
@@ -34,6 +40,10 @@ class MemoListActivity : AppCompatActivity(), View.OnClickListener {
         memoListAdapter = MemoListAdapter(memoItemClickListener)
 
         memosViewModel.allMemos.observe(this, Observer { memos ->
+
+            memos.forEach { memo ->
+                loge("${memo.memoId}, ${memo.memoTitle}, ${memo.memoText}, ${memo.memoImages.size}")
+            }
             memoListAdapter.memoList = memos
             memoListAdapter.notifyDataSetChanged()
         })
@@ -45,16 +55,14 @@ class MemoListActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
+        menuInflater.inflate(R.menu.menu_list, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> {
-                CoroutineScope(Dispatchers.IO).launch {
-                    memosViewModel.deleteAllMemo()
-                }
+                memosViewModel.deleteAllMemo()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -71,10 +79,10 @@ class MemoListActivity : AppCompatActivity(), View.OnClickListener {
 
     private val memoItemClickListener = object : MemoItemClick {
         override fun onClick(id: Int) {
-            CoroutineScope(Dispatchers.IO).launch {
-                val memo = memosViewModel.getMemo(id)
-                loge(memo.memoId.toString())
+            val intent = Intent(this@MemoListActivity, MemoDetatilActivity::class.java).apply {
+                putExtra("id", id)
             }
+            startActivity(intent)
         }
     }
 }

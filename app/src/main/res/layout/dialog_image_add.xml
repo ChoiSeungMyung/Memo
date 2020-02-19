@@ -61,6 +61,22 @@
         app:layout_constraintStart_toStartOf="@id/btnPickGallery"
         app:layout_constraintEnd_toEndOf="@id/btnPickGallery"
         app:layout_constraintTop_toBottomOf="@id/btnPickGallery"
+        app:layout_constraintBottom_toTopOf="@id/btnDialogOk"/>
+
+    <TextView
+        android:id="@+id/btnDialogOk"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="@string/btn_ok"
+        android:background="@drawable/bg_border"
+        android:textSize="@dimen/font_16"
+        android:textColor="@android:color/black"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/fix_16"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintStart_toStartOf="@id/btnWriteUrl"
+        app:layout_constraintEnd_toEndOf="@id/btnWriteUrl"
+        app:layout_constraintTop_toBottomOf="@id/btnWriteUrl"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
 

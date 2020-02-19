@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.programmers.android.apps.line.ui.MemoListActivity">
+    <item
+        android:id="@+id/action_delete"
+        android:orderInCategory="100"
+        android:title="@string/action_delete"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_modify"
+        android:orderInCategory="100"
+        android:title="@string/action_modify"
+        app:showAsAction="never" />
+</menu>

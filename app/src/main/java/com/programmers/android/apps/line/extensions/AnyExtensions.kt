@@ -11,22 +11,22 @@ fun tag(): String {
     val lineNumber = trace.lineNumber
     return "$className.$methodName($fileName:$lineNumber)"
 }
-fun Any.logv(msg: String) {
+fun logv(msg: String) {
     Log.v(tag(), msg)
 }
 
-fun Any.logd(msg: String) {
+fun logd(msg: String) {
     Log.d(tag(), msg)
 }
 
-fun Any.logi(msg: String) {
+fun logi(msg: String) {
     Log.i(tag(), msg)
 }
 
-fun Any.logw(msg: String) {
+fun logw(msg: String) {
     Log.w(tag(), msg)
 }
 
-fun Any.loge(msg: String) {
+fun loge(msg: String) {
     Log.e(tag(), msg)
 }

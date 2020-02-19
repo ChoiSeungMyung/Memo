@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Line</string>
-    <string name="action_delete_all">전체 삭제</string>
+    <string name="action_delete_all">Delete All</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_modify">Modify</string>
 
     <!--    hint -->
     <string name="memo_title_hint">Please enter a title</string>
@@ -13,4 +15,8 @@
     <string name="btn_write_url">Enter Url</string>
     <string name="btn_cancel">Cancel</string>
     <string name="btn_ok">OK</string>
+
+    <!--  toast message  -->
+    <string name="toast_image_load_fail">Failed to retrieve image</string>
+    <string name="toast_glide_error">Please re-write it from the beginning</string>
 </resources>

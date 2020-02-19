@@ -16,6 +16,7 @@
     <dimen name="btn_12">12dp</dimen>
     <dimen name="btn_36">36dp</dimen>
     <dimen name="btn_64">64dp</dimen>
+    <dimen name="btn_128">128dp</dimen>
 
     <dimen name="fab_margin">16dp</dimen>
 </resources>

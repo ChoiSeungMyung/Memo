@@ -37,18 +37,18 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.google.code.gson:gson:2.8.6'
-
 //     for Coroutine
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
 
-//    for Image loading
+//    for Image loading : https://github.com/bumptech/glide
     implementation "com.github.bumptech.glide:glide:$glideVersion"
 
 //    Room
     implementation "androidx.room:room-runtime:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
     implementation "androidx.work:work-runtime-ktx:$workVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
 
 //    ViewModel and LiveData
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"

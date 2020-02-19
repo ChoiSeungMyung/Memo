@@ -8,10 +8,10 @@ import com.programmers.android.apps.line.models.Memo
 @Dao
 interface MemoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertMemo(memo: Memo)
+    suspend fun insertMemo(memo: Memo)
 
     @Delete
-    fun deleteMemo(vararg memo: Memo)
+    suspend fun deleteMemo(vararg memo: Memo)
 
     @Query("SELECT * FROM $DB_TABLE_MEMO ORDER BY memoId")
     fun getAllMemos(): LiveData<List<Memo>>
@@ -20,8 +20,8 @@ interface MemoDao {
     fun getMemo(id: Int): Memo
 
     @Update
-    fun modifyMemo(memo: Memo)
+    suspend fun modifyMemo(memo: Memo)
 
     @Query("DELETE FROM $DB_TABLE_MEMO")
-    fun deleteAll()
+    suspend fun deleteAll()
 }

@@ -6,12 +6,12 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import com.programmers.android.apps.line.R
-import kotlinx.android.synthetic.main.dialog_image_pick.*
+import kotlinx.android.synthetic.main.dialog_image_add.*
 
-class ImagePickDialog(context: Context, private val listener: DialogClickListener): Dialog(context), View.OnClickListener {
+class ImageAddDialog(context: Context, private val listener: DialogClickListener): Dialog(context), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.dialog_image_pick)
+        setContentView(R.layout.dialog_image_add)
         setCanceledOnTouchOutside(false)
 
         window?.apply {
@@ -21,6 +21,7 @@ class ImagePickDialog(context: Context, private val listener: DialogClickListene
 
         btnTakePicture.setOnClickListener(this)
         btnPickGallery.setOnClickListener(this)
+        btnDialogOk.setOnClickListener(this)
     }
 
     override fun onClick(view: View?) {
@@ -29,9 +30,9 @@ class ImagePickDialog(context: Context, private val listener: DialogClickListene
     }
 
     class Builder(context: Context, listener: DialogClickListener) {
-        private val dialog = ImagePickDialog(context, listener)
+        private val dialog = ImageAddDialog(context, listener)
 
-        fun show(): ImagePickDialog {
+        fun show(): ImageAddDialog {
             dialog.show()
             return dialog
         }

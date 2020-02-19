@@ -1,14 +1,17 @@
 package com.programmers.android.apps.line.models
 
 import com.programmers.android.apps.line.models.room.MemoDao
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MemoRepository internal constructor(private val dao: MemoDao) {
     fun getAllMemos() = dao.getAllMemos()
-    fun getMemo(id: Int) = dao.getMemo(id)
-    fun insertMemo(memo: Memo) = dao.insertMemo(memo)
-    fun deleteMemo(vararg memo: Memo) = dao.deleteMemo(*memo)
-    fun modifyMemo(memo: Memo) = dao.modifyMemo(memo)
-    fun deleteAllMemo() = dao.deleteAll()
+    fun getMemo(id: Int): Memo = dao.getMemo(id)
+    fun insertMemo(memo: Memo) = CoroutineScope(Dispatchers.IO).launch { dao.insertMemo(memo) }
+    fun deleteMemo(vararg memo: Memo) = CoroutineScope(Dispatchers.IO).launch { dao.deleteMemo(*memo) }
+    fun modifyMemo(memo: Memo) = CoroutineScope(Dispatchers.IO).launch { dao.modifyMemo(memo) }
+    fun deleteAllMemo() = CoroutineScope(Dispatchers.IO).launch { dao.deleteAll() }
 
     companion object {
         @Volatile
