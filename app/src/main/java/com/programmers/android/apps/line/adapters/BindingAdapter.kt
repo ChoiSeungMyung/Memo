@@ -1,5 +1,7 @@
 package com.programmers.android.apps.line.adapters
 
+import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 

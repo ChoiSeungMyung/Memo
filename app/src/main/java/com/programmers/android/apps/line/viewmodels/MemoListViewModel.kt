@@ -1,13 +1,17 @@
 package com.programmers.android.apps.line.viewmodels
 
 import android.app.Application
+import android.content.Context
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.programmers.android.apps.line.models.Memo
 import com.programmers.android.apps.line.models.MemoRepository
 import com.programmers.android.apps.line.models.room.MemoDatabase
 
-class MemoViewModel(application: Application) : AndroidViewModel(application) {
+class MemoListViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: MemoRepository
     val allMemos: LiveData<List<Memo>>
 
@@ -22,4 +26,8 @@ class MemoViewModel(application: Application) : AndroidViewModel(application) {
     fun deleteMemo(vararg memo: Memo) = repository.deleteMemo(*memo)
     fun modifyMemo(memo: Memo) = repository.modifyMemo(memo)
     fun deleteAllMemo() = repository.deleteAllMemo()
+    fun callActivity(intent: Intent) {
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(getApplication(), intent, null)
+    }
 }

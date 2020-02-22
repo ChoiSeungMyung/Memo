@@ -14,6 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.programmers.android.apps.line.R
 import com.programmers.android.apps.line.databinding.ListImageItemBinding
 import com.programmers.android.apps.line.extensions.loge
+import com.programmers.android.apps.line.models.MemoImage
 import kotlinx.android.synthetic.main.list_image_item.view.*
 
 class ImagesListViewHolder(
@@ -21,11 +22,13 @@ class ImagesListViewHolder(
     private val binding: ListImageItemBinding
 ) :
     RecyclerView.ViewHolder(binding.root) {
-    fun bind(listener: ImageDeleteClickListener, path: String?, position: Int) {
+    fun bind(listener: ImageClickListener, memoImage: MemoImage?, position: Int) {
+        binding.memoImage = memoImage
+        loge("${memoImage?.deletable}")
         binding.apply {
-            path?.let {
+            memoImage?.let {
                 Glide.with(context)
-                    .load(path)
+                    .load(memoImage.imageUrl)
                     .centerCrop()
                     .listener(object : RequestListener<Drawable> {
                         override fun onLoadFailed(
@@ -58,13 +61,18 @@ class ImagesListViewHolder(
                     .into(binding.root.imageThumb)
             }
 
-            clickListener = View.OnClickListener {
-                listener.onClick(position)
+            deleteClickListener = View.OnClickListener {
+                listener.onDelete(position)
+            }
+
+            viewClickListener = View.OnClickListener {
+                listener.onView(position)
             }
         }
     }
 }
 
-interface ImageDeleteClickListener {
-    fun onClick(position: Int)
+interface ImageClickListener {
+    fun onView(position: Int)
+    fun onDelete(position: Int)
 }

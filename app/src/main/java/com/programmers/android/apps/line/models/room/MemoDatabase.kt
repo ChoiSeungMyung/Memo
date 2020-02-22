@@ -1,12 +1,15 @@
 package com.programmers.android.apps.line.models.room
 
 import android.content.Context
+import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.programmers.android.apps.line.DB_NAME
 import com.programmers.android.apps.line.models.Memo
+import com.programmers.android.apps.line.models.MemoImage
 
-@Database(entities = [Memo::class], version = 2, exportSchema = false)
+@Database(entities = [Memo::class], version = 3, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class MemoDatabase : RoomDatabase() {
 
@@ -32,11 +35,11 @@ abstract class MemoDatabase : RoomDatabase() {
 
 class Converters {
     @TypeConverter
-    fun listToJson(value: List<String?>): String = Gson().toJson(value)
+    fun listToJson(value: List<MemoImage?>): String = Gson().toJson(value)
 
     @TypeConverter
-    fun jsonToList(value: String): List<String?> {
-        val objects = Gson().fromJson(value, Array<String?>::class.java) as Array<String?>
+    fun jsonToList(value: String): List<MemoImage?> {
+        val objects = Gson().fromJson(value, Array<MemoImage?>::class.java)
         return objects.toList()
     }
 }

@@ -11,24 +11,29 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.programmers.android.apps.line.PACKAGE_NAME
 import com.programmers.android.apps.line.R
 import com.programmers.android.apps.line.adapters.MemoImagesAdapter
-import com.programmers.android.apps.line.adapters.viewholders.ImageDeleteClickListener
+import com.programmers.android.apps.line.adapters.viewholders.ImageClickListener
+import com.programmers.android.apps.line.models.ArrayListLiveData
 import com.programmers.android.apps.line.extensions.createFile
 import com.programmers.android.apps.line.extensions.loge
 import com.programmers.android.apps.line.models.Memo
+import com.programmers.android.apps.line.models.MemoImage
 import com.programmers.android.apps.line.ui.views.ImageAddDialog
-import com.programmers.android.apps.line.viewmodels.MemoImagesViewModel
-import com.programmers.android.apps.line.viewmodels.MemoViewModel
+import com.programmers.android.apps.line.ui.views.ImageViewDialog
+import com.programmers.android.apps.line.viewmodels.MemoDetailViewModel
+import com.programmers.android.apps.line.viewmodels.MemoListViewModel
 import kotlinx.android.synthetic.main.activity_memo_detail.*
 import kotlinx.android.synthetic.main.activity_memo_detail.toolbar
 import kotlinx.android.synthetic.main.dialog_image_add.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
 
@@ -36,12 +41,12 @@ class MemoDetatilActivity : AppCompatActivity(), View.OnClickListener {
     private val IMAGE_FROM_GALLERY = 101
     private val IMAGE_FROM_CAMERA = 103
 
-    private lateinit var memosViewModel: MemoViewModel
+    private val ioDispather = Dispatchers.IO
+    private lateinit var memosListViewModel: MemoListViewModel
+    private lateinit var memoDetailViewModel: MemoDetailViewModel
+
     private lateinit var memoImagesAdapter: MemoImagesAdapter
 
-    private lateinit var memoImagesViewModel: MemoImagesViewModel
-
-    //    private var memo: Memo? = null
     private lateinit var memo: Memo
 
     private var imageAddDialog: ImageAddDialog? = null
@@ -51,7 +56,13 @@ class MemoDetatilActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private var mode = Mode.WRITE
+    private val isRead: Boolean
+        get() = mode == Mode.READ
+
     private var photoUri: Uri? = null
+    private val livedataImages =
+        ArrayListLiveData<MemoImage?>()
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_detail, menu)
         return true
@@ -60,9 +71,7 @@ class MemoDetatilActivity : AppCompatActivity(), View.OnClickListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_delete -> {
-                memo.let {
-                    memosViewModel.deleteMemo(it)
-                }
+                memosListViewModel.deleteMemo(memo)
                 finish()
                 true
             }
@@ -79,16 +88,21 @@ class MemoDetatilActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_memo_detail)
         setSupportActionBar(toolbar)
 
-        memoImagesAdapter = MemoImagesAdapter(this, imageDeleteClickListener)
-        memosViewModel = ViewModelProvider(this).get(MemoViewModel::class.java)
+        memoImagesAdapter = MemoImagesAdapter(this, imageClickListener)
 
-        memoImagesViewModel = ViewModelProvider(this).get(MemoImagesViewModel::class.java)
+        memosListViewModel = ViewModelProvider(this).get(MemoListViewModel::class.java)
+        memoDetailViewModel = ViewModelProvider(this).get(MemoDetailViewModel::class.java)
 
         memoImagesRecyclerView.apply {
             layoutManager =
                 LinearLayoutManager(context).apply { orientation = LinearLayoutManager.HORIZONTAL }
             adapter = memoImagesAdapter
         }
+
+        livedataImages.observe(this, Observer { imageList ->
+            memoImagesAdapter.images = imageList
+            memoImagesAdapter.notifyDataSetChanged()
+        })
 
         val receivedId = intent.getIntExtra("id", -1)
         if (receivedId != -1) {
@@ -107,20 +121,21 @@ class MemoDetatilActivity : AppCompatActivity(), View.OnClickListener {
                     Mode.WRITE -> {
                         val memo = Memo(
                             memoDetailTitle.text.toString(),
-                            memoDetailText.text.toString(),
-                            memoImagesAdapter.images
+                            memoDetailDescription.text.toString(),
+                            livedataImages.value?.toList() ?: emptyList()
                         )
-                        memosViewModel.insertMemo(memo)
+                        memosListViewModel.insertMemo(memo)
                     }
                     Mode.MODIFY -> {
                         memo.apply {
                             memoTitle = memoDetailTitle.text.toString()
-                            memoText = memoDetailText.text.toString()
-                            memoImages = memoImagesAdapter.images
+                            memoDescription = memoDetailDescription.text.toString()
+                            memoImages = livedataImages.value!!.toList()
                         }
-                        memosViewModel.modifyMemo(memo)
+                        memosListViewModel.modifyMemo(memo)
                     }
                     Mode.READ -> {
+
                     }
                 }
                 finish()
@@ -135,43 +150,45 @@ class MemoDetatilActivity : AppCompatActivity(), View.OnClickListener {
         mode = Mode.READ
         appBar.visibility = View.VISIBLE
         CoroutineScope(Dispatchers.IO).launch {
-            memo = memosViewModel.getMemo(receivedId)
-
-            btnMemoImageAdd.visibility = View.GONE
-            tvMemoImageTitleHint.visibility = View.GONE
-            memoDetailTitle.apply {
-                isEnabled = false
-                if (memo.memoTitle.isEmpty()) setText("")
-                else setText(memo.memoTitle)
-                setTextColor(Color.BLACK)
-            }
-
-            memoDetailText.apply {
-                isEnabled = false
-                if (memo.memoText.isEmpty()) setText("")
-                else setText(memo.memoText)
-                setTextColor(Color.BLACK)
-            }
-
-            if (memo.memoImages.isNotEmpty()) {
-                memo.memoImages.forEach { imagePath ->
-                    memoImagesAdapter.images.add(imagePath)
+            memo = memosListViewModel.getMemo(receivedId)
+            withContext(Dispatchers.Main) {
+                btnMemoImageAdd.visibility = View.GONE
+                tvMemoImageTitleHint.visibility = View.GONE
+                memoDetailTitle.apply {
+                    isEnabled = false
+                    if (memo.memoTitle.isEmpty()) setText("")
+                    else setText(memo.memoTitle)
+                    setTextColor(Color.BLACK)
                 }
-                memoImagesAdapter.notifyDataSetChanged()
+
+                memoDetailDescription.apply {
+                    isEnabled = false
+                    if (memo.memoDescription.isEmpty()) setText("")
+                    else setText(memo.memoDescription)
+                    setTextColor(Color.BLACK)
+                }
+
+                if (memo.memoImages.isNotEmpty()) {
+                    memo.memoImages.forEach { imagePath ->
+                        imagePath?.deletable = isRead
+                        livedataImages.add(imagePath)
+                    }
+                }
             }
         }
     }
 
     private fun setModifyMode() {
         mode = Mode.MODIFY
+        loge("$isRead")
+        memo.memoImages.forEach { it?.deletable = isRead }
         appBar.visibility = View.GONE
         btnMemoImageAdd.visibility = View.VISIBLE
-
         memoDetailTitle.isEnabled = true
-        memoDetailText.isEnabled = true
+        memoDetailDescription.isEnabled = true
     }
 
-    private val dialogClickListener = object : ImageAddDialog.DialogClickListener {
+    private val dialogClickListener = object : ImageAddDialog.ImageAddDialogClickListener {
         override fun onclick(id: Int?) {
             when (id) {
                 R.id.btnTakePicture -> {
@@ -209,7 +226,7 @@ class MemoDetatilActivity : AppCompatActivity(), View.OnClickListener {
                 R.id.btnDialogOk -> {
                     imageAddDialog?.let {
                         if (imageAddDialog?.btnWriteUrl?.text!!.isNotEmpty()) {
-                            memoImagesAdapter.images.add(imageAddDialog?.btnWriteUrl?.text?.toString())
+                            livedataImages.add(MemoImage(imageAddDialog?.btnWriteUrl?.text!!.toString()))
                         }
                     }
                 }
@@ -222,30 +239,27 @@ class MemoDetatilActivity : AppCompatActivity(), View.OnClickListener {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 IMAGE_FROM_CAMERA -> {
-                    photoUri?.let {
-                        memoImagesAdapter.apply {
-                            images.add(it.toString())
-                            notifyItemInserted(itemCount)
-                        }
-                    }
+                    photoUri?.let { livedataImages.add(MemoImage(it.toString())) }
                 }
                 IMAGE_FROM_GALLERY -> {
-                    data?.data?.let {
-                        memoImagesAdapter.apply {
-                            images.add(it.toString())
-                            notifyItemInserted(itemCount)
-                        }
-                    }
+                    data?.data?.let { livedataImages.add(MemoImage(it.toString())) }
                 }
             }
         }
     }
 
-    private val imageDeleteClickListener = object : ImageDeleteClickListener {
-        override fun onClick(position: Int) {
-            memoImagesAdapter.images.removeAt(position)
-            memoImagesAdapter.notifyItemRemoved(position)
-            memoImagesAdapter.notifyDataSetChanged()
+    private val imageClickListener = object : ImageClickListener {
+        override fun onView(position: Int) {
+            loge("${livedataImages.value?.get(position)?.imageUrl}")
+            ImageViewDialog.Builder(
+                this@MemoDetatilActivity, livedataImages.value?.get(position)?.imageUrl
+            ).show()
+        }
+
+        override fun onDelete(position: Int) {
+            livedataImages.removeAt(position)
         }
     }
+
+
 }

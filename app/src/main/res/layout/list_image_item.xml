@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+
     <data>
+
+        <import type="android.view.View" />
+
         <variable
-            name="clickListener"
+            name="deleteClickListener"
             type="android.view.View.OnClickListener" />
+
+        <variable
+            name="viewClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="memoImage"
+            type="com.programmers.android.apps.line.models.MemoImage" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="wrap_content"
@@ -16,18 +29,20 @@
             android:id="@+id/imageThumb"
             android:layout_width="@dimen/btn_128"
             android:layout_height="0dp"
+            android:onClick="@{viewClickListener}"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintDimensionRatio="1:1"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/btnImageDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="@{deleteClickListener}"
             android:src="@drawable/ic_text_cancel"
-            android:onClick="@{clickListener}"
-            app:layout_constraintTop_toTopOf="@id/imageThumb"
+            android:visibility="@{memoImage.deletable ? View.GONE : View.VISIBLE}"
+            app:layout_constraintEnd_toEndOf="@id/imageThumb"
             app:layout_constraintStart_toEndOf="@id/imageThumb"
-            app:layout_constraintEnd_toEndOf="@id/imageThumb"/>
+            app:layout_constraintTop_toTopOf="@id/imageThumb" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

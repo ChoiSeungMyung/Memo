@@ -6,15 +6,15 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.programmers.android.apps.line.R
-import com.programmers.android.apps.line.adapters.viewholders.ImageDeleteClickListener
+import com.programmers.android.apps.line.adapters.viewholders.ImageClickListener
 import com.programmers.android.apps.line.adapters.viewholders.ImagesListViewHolder
+import com.programmers.android.apps.line.models.MemoImage
 
 class MemoImagesAdapter(
     private val context: Context,
-    private val listener: ImageDeleteClickListener
+    private val listener: ImageClickListener
 ) : RecyclerView.Adapter<ImagesListViewHolder>() {
-    val images = arrayListOf<String?>()
-
+    var images = arrayListOf<MemoImage?>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImagesListViewHolder =
         ImagesListViewHolder(
             context,
@@ -29,7 +29,7 @@ class MemoImagesAdapter(
     override fun getItemCount(): Int = images.size
 
     override fun onBindViewHolder(holder: ImagesListViewHolder, position: Int) {
-        val imagePath = images[position]
-        holder.bind(listener, imagePath, position)
+        val memoImage = images[position]
+        holder.bind(listener, memoImage, position)
     }
 }

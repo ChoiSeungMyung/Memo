@@ -5,19 +5,19 @@
     <string name="action_delete">삭제</string>
     <string name="action_modify">수정</string>
 
-    <!--    hint -->
+    <!-- hint -->
     <string name="memo_title_hint">제목을 입력해 주세요</string>
     <string name="memo_image_add_hint">이미지를 추가해 보세요</string>
     <string name="dialog_image_pick_hint">이미지 추가 방법을 선택해주세요</string>
 
-    <!--    btn description -->
+    <!-- btn description -->
     <string name="btn_take_picture">사진 찍기</string>
     <string name="btn_pick_gallery">사진첩에서 선택</string>
     <string name="btn_write_url">Url로 입력</string>
     <string name="btn_cancel">취소</string>
     <string name="btn_ok">확인</string>
 
-    <!--  toast message  -->
+    <!-- toast message -->
     <string name="toast_image_load_fail">이미지를 불러오는데 실패했습니다</string>
     <string name="toast_glide_error">처음부터 다시 작성해주세요</string>
 </resources>

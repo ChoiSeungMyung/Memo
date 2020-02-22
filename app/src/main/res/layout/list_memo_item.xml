@@ -13,11 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/fix_8"
+        android:background="@drawable/bottom_border"
         android:onClick="@{clickListener}">
         <ImageView
             android:id="@+id/memoThumb"
             android:layout_width="@dimen/btn_128"
             android:layout_height="0dp"
+            android:scaleType="centerCrop"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -32,11 +34,11 @@
             android:layout_marginStart="@dimen/fix_8"
             app:layout_constraintStart_toEndOf="@id/memoThumb"
             app:layout_constraintTop_toTopOf="@id/memoThumb"
-            app:layout_constraintBottom_toTopOf="@id/memoText"
+            app:layout_constraintBottom_toTopOf="@id/memoDescription"
             app:memoTitle="@{memo.memoTitle}"/>
 
         <TextView
-            android:id="@+id/memoText"
+            android:id="@+id/memoDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/fix_2"
@@ -44,6 +46,6 @@
             app:layout_constraintStart_toStartOf="@id/memoTitle"
             app:layout_constraintTop_toBottomOf="@id/memoTitle"
             app:layout_constraintBottom_toBottomOf="@id/memoThumb"
-            app:memoText="@{memo.memoText}"/>
+            app:memoText="@{memo.memoDescription}"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -15,11 +15,11 @@ import com.programmers.android.apps.line.adapters.MemoListAdapter
 import com.programmers.android.apps.line.adapters.viewholders.MemoItemClick
 import com.programmers.android.apps.line.extensions.loge
 import com.programmers.android.apps.line.utilities.PermissionUtil
-import com.programmers.android.apps.line.viewmodels.MemoViewModel
+import com.programmers.android.apps.line.viewmodels.MemoListViewModel
 import kotlinx.android.synthetic.main.activity_memo_list.*
 
 class MemoListActivity : AppCompatActivity(), View.OnClickListener {
-    private lateinit var memosViewModel: MemoViewModel
+    private lateinit var memosListViewModel: MemoListViewModel
     private lateinit var memoListAdapter: MemoListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,18 +32,16 @@ class MemoListActivity : AppCompatActivity(), View.OnClickListener {
             PermissionUtil.REQUIRED_PERMISSIONS,
             PermissionUtil.REQUEST_CODE_PERMISSIONS
         )
-
-        memosViewModel = ViewModelProvider(this).get(MemoViewModel::class.java)
-
         fab.setOnClickListener(this)
+
+        memosListViewModel = ViewModelProvider(this).get(MemoListViewModel::class.java)
+        memosListViewModel.allMemos.value?.forEach { memo ->
+            loge("${memo.memoId}, ${memo.memoTitle}, ${memo.memoDescription}, ${memo.memoImages.size}")
+        }
 
         memoListAdapter = MemoListAdapter(memoItemClickListener)
 
-        memosViewModel.allMemos.observe(this, Observer { memos ->
-
-            memos.forEach { memo ->
-                loge("${memo.memoId}, ${memo.memoTitle}, ${memo.memoText}, ${memo.memoImages.size}")
-            }
+        memosListViewModel.allMemos.observe(this, Observer { memos ->
             memoListAdapter.memoList = memos
             memoListAdapter.notifyDataSetChanged()
         })
@@ -61,8 +59,8 @@ class MemoListActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_settings -> {
-                memosViewModel.deleteAllMemo()
+            R.id.action_delete_allmemo -> {
+                memosListViewModel.deleteAllMemo()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -72,17 +70,19 @@ class MemoListActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(view: View?) {
         when (view) {
             fab -> {
-                startActivity(Intent(this, MemoDetatilActivity::class.java))
+                memosListViewModel.callActivity(
+                    Intent(this, MemoDetatilActivity::class.java))
             }
         }
     }
 
     private val memoItemClickListener = object : MemoItemClick {
         override fun onClick(id: Int) {
-            val intent = Intent(this@MemoListActivity, MemoDetatilActivity::class.java).apply {
-                putExtra("id", id)
-            }
-            startActivity(intent)
+            memosListViewModel.callActivity(
+                Intent(
+                    this@MemoListActivity,
+                    MemoDetatilActivity::class.java)
+                    .apply { putExtra("id", id) })
         }
     }
 }

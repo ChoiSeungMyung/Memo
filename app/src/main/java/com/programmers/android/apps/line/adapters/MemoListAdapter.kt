@@ -9,10 +9,8 @@ import com.programmers.android.apps.line.adapters.viewholders.MemoItemClick
 import com.programmers.android.apps.line.adapters.viewholders.MemoListViewHolder
 import com.programmers.android.apps.line.models.Memo
 
-
 class MemoListAdapter(private val listener: MemoItemClick) : RecyclerView.Adapter<MemoListViewHolder>() {
     var memoList: List<Memo> = emptyList()
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemoListViewHolder =
         MemoListViewHolder(
             DataBindingUtil.inflate(
