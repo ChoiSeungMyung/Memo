@@ -167,7 +167,7 @@ class MemoDetailActivity : AppCompatActivity(), View.OnClickListener {
                     }
                 }
 
-                /**
+                /*
                  * url입력란이 비어있지 않다면 url입력으로 판단
                  */
                 R.id.btnDialogOk -> {
