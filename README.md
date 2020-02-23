@@ -19,7 +19,6 @@ Android - Kotlin
 		ㄴ MemoDao.kt
 		ㄴ MemoDataBase.kt
 	    ㄴ Memo.kt
-	    ㄴ MemoImage.kt
 	    ㄴ MemoRepository.kt
 
     view
