@@ -9,7 +9,6 @@ import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.programmers.android.apps.line.R
 import com.programmers.android.apps.line.adapters.MemoListAdapter
 import com.programmers.android.apps.line.adapters.viewholders.MemoItemClick
@@ -47,7 +46,6 @@ class MemoListActivity : AppCompatActivity(), View.OnClickListener {
         })
 
         memoRecyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
             adapter = memoListAdapter
         }
     }
@@ -71,7 +69,7 @@ class MemoListActivity : AppCompatActivity(), View.OnClickListener {
         when (view) {
             fab -> {
                 memosListViewModel.callActivity(
-                    Intent(this, MemoDetatilActivity::class.java))
+                    Intent(this, MemoDetailActivity::class.java))
             }
         }
     }
@@ -81,7 +79,7 @@ class MemoListActivity : AppCompatActivity(), View.OnClickListener {
             memosListViewModel.callActivity(
                 Intent(
                     this@MemoListActivity,
-                    MemoDetatilActivity::class.java)
+                    MemoDetailActivity::class.java)
                     .apply { putExtra("id", id) })
         }
     }

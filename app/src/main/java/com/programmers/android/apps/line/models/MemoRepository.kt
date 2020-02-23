@@ -4,10 +4,11 @@ import com.programmers.android.apps.line.models.room.MemoDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class MemoRepository internal constructor(private val dao: MemoDao) {
-    fun getAllMemos() = dao.getAllMemos()
-    fun getMemo(id: Int): Memo = dao.getMemo(id)
+    fun getAllMemos() = runBlocking(context = Dispatchers.Default){dao.getAllMemos()}
+    fun getMemo(id: Int): Memo = runBlocking(context = Dispatchers.Default) { dao.getMemo(id) }
     fun insertMemo(memo: Memo) = CoroutineScope(Dispatchers.IO).launch { dao.insertMemo(memo) }
     fun deleteMemo(vararg memo: Memo) = CoroutineScope(Dispatchers.IO).launch { dao.deleteMemo(*memo) }
     fun modifyMemo(memo: Memo) = CoroutineScope(Dispatchers.IO).launch { dao.modifyMemo(memo) }

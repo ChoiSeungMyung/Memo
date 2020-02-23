@@ -19,6 +19,12 @@ class ArrayListLiveData<T>() : MutableLiveData<ArrayList<T>>() {
         value = items
     }
 
+    fun replaceAll(list: List<T>) {
+        val items = value
+        items?.clear()
+        items?.addAll(list)
+        value = items
+    }
     fun clear(notify: Boolean) {
         val items = value
         items?.clear()

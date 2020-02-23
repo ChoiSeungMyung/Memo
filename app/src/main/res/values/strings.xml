@@ -7,6 +7,7 @@
     <!-- hint -->
     <string name="memo_title_hint">Please enter a title</string>
     <string name="memo_image_add_hint">Try adding images</string>
+    <string name="memo_description_hint">Please enter a memo</string>
     <string name="dialog_image_pick_hint">Please choose how to add images</string>
 
     <!-- btn description-->

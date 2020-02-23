@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="android.view.View" />
+
         <variable
             name="detailViewmodel"
             type="com.programmers.android.apps.line.viewmodels.MemoDetailViewModel" />
     </data>
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rootView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.MemoDetatilActivity">
+        tools:context=".ui.MemoDetailActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay"
-            android:visibility="gone"
+            android:visibility="@{detailViewmodel.isReadObservable() ? View.VISIBLE : View.GONE}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -37,7 +41,10 @@
             android:layout_height="wrap_content"
             android:background="@drawable/bg_border"
             android:hint="@string/memo_title_hint"
-            android:padding="@dimen/fix_2"
+            android:padding="@dimen/fix_12"
+            android:textColor="@android:color/black"
+            android:enabled="@{!detailViewmodel.isReadObservable()}"
+            android:text="@={detailViewmodel.title}"
             app:layout_constraintTop_toBottomOf="@id/appBar" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -53,6 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/fix_1"
                 android:text="@string/memo_image_add_hint"
+                android:visibility="@{detailViewmodel.isReadObservable() ? View.GONE : View.VISIBLE}"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
@@ -61,6 +69,7 @@
                 android:layout_height="@dimen/btn_128"
                 android:layout_marginTop="@dimen/fix_10"
                 android:layout_marginBottom="@dimen/fix_2"
+                android:visibility="@{detailViewmodel.isReadObservable() ? View.GONE : View.VISIBLE}"
                 android:src="@drawable/ic_camera_add_30"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -71,6 +80,8 @@
                 android:layout_width="0dp"
                 android:layout_height="@dimen/btn_128"
                 android:layout_marginStart="@dimen/fix_2"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="@id/btnMemoImageAdd"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/btnMemoImageAdd"
@@ -82,6 +93,11 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@drawable/bg_border"
+            android:text="@={detailViewmodel.description}"
+            android:textColor="@android:color/black"
+            android:enabled="@{!detailViewmodel.isReadObservable()}"
+            android:padding="@dimen/fix_12"
+            android:hint="@string/memo_description_hint"
             app:layout_constraintBottom_toTopOf="@id/btnMemoCancel"
             app:layout_constraintTop_toBottomOf="@id/memoDetailImageWrapper" />
 
@@ -91,6 +107,7 @@
             android:layout_height="@dimen/btn_64"
             android:background="@drawable/bg_border"
             android:text="@string/btn_cancel"
+            android:onClick="@{(view) -> detailViewmodel.cancelAction(view.getContext())}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintWidth_percent="0.5" />
@@ -101,6 +118,7 @@
             android:layout_height="@dimen/btn_64"
             android:background="@drawable/bg_border"
             android:text="@string/btn_ok"
+            android:onClick="@{(view) -> detailViewmodel.okAction(view.getContext())}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/btnMemoCancel"
             app:layout_constraintWidth_percent="0.5" />

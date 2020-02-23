@@ -1,5 +1,6 @@
 package com.programmers.android.apps.line.adapters.viewholders
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.View
@@ -15,6 +16,8 @@ import com.programmers.android.apps.line.R
 import com.programmers.android.apps.line.databinding.ListImageItemBinding
 import com.programmers.android.apps.line.extensions.loge
 import com.programmers.android.apps.line.models.MemoImage
+import com.programmers.android.apps.line.ui.views.ImageViewDialog
+import com.programmers.android.apps.line.viewmodels.MemoDetailViewModel
 import kotlinx.android.synthetic.main.list_image_item.view.*
 
 class ImagesListViewHolder(
@@ -22,9 +25,8 @@ class ImagesListViewHolder(
     private val binding: ListImageItemBinding
 ) :
     RecyclerView.ViewHolder(binding.root) {
-    fun bind(listener: ImageClickListener, memoImage: MemoImage?, position: Int) {
+    fun bind(viewModel: MemoDetailViewModel, memoImage: MemoImage?, position: Int) {
         binding.memoImage = memoImage
-        loge("${memoImage?.deletable}")
         binding.apply {
             memoImage?.let {
                 Glide.with(context)
@@ -62,11 +64,13 @@ class ImagesListViewHolder(
             }
 
             deleteClickListener = View.OnClickListener {
-                listener.onDelete(position)
+                viewModel.imageRemoveAt(position)
             }
 
             viewClickListener = View.OnClickListener {
-                listener.onView(position)
+                ImageViewDialog.Builder(
+                    it.context, memoImage?.imageUrl
+                ).show()
             }
         }
     }

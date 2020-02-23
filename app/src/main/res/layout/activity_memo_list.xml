@@ -28,6 +28,7 @@
         android:id="@+id/memoRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/appBar"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
@@ -37,8 +38,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+        android:backgroundTint="#0F7364"
+        app:borderWidth="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_dialog_dialer" />
+        app:srcCompat="@drawable/ic_camera_plus" />
+<!--    app:srcCompat="@android:drawable/ic_dialog_dialer"-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

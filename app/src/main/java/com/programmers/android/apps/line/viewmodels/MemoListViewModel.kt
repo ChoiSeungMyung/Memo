@@ -21,10 +21,6 @@ class MemoListViewModel(application: Application) : AndroidViewModel(application
         allMemos = repository.getAllMemos()
     }
 
-    fun insertMemo(memo: Memo) = repository.insertMemo(memo)
-    fun getMemo(id: Int) = repository.getMemo(id)
-    fun deleteMemo(vararg memo: Memo) = repository.deleteMemo(*memo)
-    fun modifyMemo(memo: Memo) = repository.modifyMemo(memo)
     fun deleteAllMemo() = repository.deleteAllMemo()
     fun callActivity(intent: Intent) {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK

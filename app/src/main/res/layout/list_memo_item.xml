@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="memo"
@@ -8,8 +10,7 @@
             name="clickListener"
             type="android.view.View.OnClickListener" />
     </data>
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/fix_8"
@@ -32,10 +33,10 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/font_32"
             android:layout_marginStart="@dimen/fix_8"
+            android:text="@{memo.memoTitle}"
             app:layout_constraintStart_toEndOf="@id/memoThumb"
             app:layout_constraintTop_toTopOf="@id/memoThumb"
-            app:layout_constraintBottom_toTopOf="@id/memoDescription"
-            app:memoTitle="@{memo.memoTitle}"/>
+            app:layout_constraintBottom_toTopOf="@id/memoDescription" />
 
         <TextView
             android:id="@+id/memoDescription"
@@ -43,9 +44,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/fix_2"
             android:textSize="@dimen/font_16"
+            android:text="@{memo.memoDescription}"
             app:layout_constraintStart_toStartOf="@id/memoTitle"
             app:layout_constraintTop_toBottomOf="@id/memoTitle"
-            app:layout_constraintBottom_toBottomOf="@id/memoThumb"
-            app:memoText="@{memo.memoDescription}"/>
+            app:layout_constraintBottom_toBottomOf="@id/memoThumb" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

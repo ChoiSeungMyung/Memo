@@ -7,6 +7,7 @@
 
     <!-- hint -->
     <string name="memo_title_hint">제목을 입력해 주세요</string>
+    <string name="memo_description_hint">메모를 입력해 주세요</string>
     <string name="memo_image_add_hint">이미지를 추가해 보세요</string>
     <string name="dialog_image_pick_hint">이미지 추가 방법을 선택해주세요</string>
 
