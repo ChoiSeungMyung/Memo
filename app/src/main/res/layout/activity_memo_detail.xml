@@ -42,6 +42,7 @@
             android:background="@drawable/border_bg"
             android:hint="@string/memo_title_hint"
             android:padding="@dimen/fix_12"
+            android:focusableInTouchMode="@{!detailViewmodel.isReadObservable()}"
             android:textColor="@android:color/black"
             android:enabled="@{!detailViewmodel.isReadObservable()}"
             android:text="@={detailViewmodel.title}"
@@ -52,10 +53,11 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@drawable/border_bg"
-            app:layout_constraintTop_toBottomOf="@id/memoDetailTitle">
+            app:layout_constraintTop_toBottomOf="@id/memoDetailTitle"
+            app:layout_constraintBottom_toTopOf="@id/memoDetailDescription">
 
             <TextView
-                android:id="@+id/tvMemoImageTitleHint"
+                android:id="@+id/tvMemoImageHint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/fix_1"
@@ -65,28 +67,30 @@
 
             <ImageButton
                 android:id="@+id/btnMemoImageAdd"
-                android:layout_width="@dimen/btn_128"
-                android:layout_height="@dimen/btn_128"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:layout_marginTop="@dimen/fix_10"
                 android:layout_marginBottom="@dimen/fix_2"
                 android:layout_marginStart="1dp"
                 android:visibility="@{detailViewmodel.isReadObservable() ? View.GONE : View.VISIBLE}"
                 android:src="@drawable/ic_image_add"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintWidth_percent="0.33"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvMemoImageTitleHint" />
+                app:layout_constraintTop_toBottomOf="@id/tvMemoImageHint" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/memoImagesRecyclerView"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/btn_128"
+                android:layout_height="0dp"
                 android:layout_marginStart="@dimen/fix_2"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="@id/btnMemoImageAdd"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/btnMemoImageAdd"
-                app:layout_constraintTop_toTopOf="@id/btnMemoImageAdd" />
+                app:layout_constraintTop_toBottomOf="@id/tvMemoImageHint" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <EditText
@@ -96,7 +100,7 @@
             android:background="@drawable/border_bg"
             android:text="@={detailViewmodel.description}"
             android:textColor="@android:color/black"
-            android:enabled="@{!detailViewmodel.isReadObservable()}"
+            android:focusableInTouchMode="@{!detailViewmodel.isReadObservable()}"
             android:padding="@dimen/fix_12"
             android:hint="@string/memo_description_hint"
             app:layout_constraintBottom_toTopOf="@id/btnMemoCancel"

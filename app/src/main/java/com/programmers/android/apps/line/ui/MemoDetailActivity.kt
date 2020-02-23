@@ -78,6 +78,8 @@ class MemoDetailActivity : AppCompatActivity(), View.OnClickListener {
 
         val receivedId = intent.getIntExtra("id", -1)
         if (receivedId != -1 && !memoDetailViewModel.hasInit) {
+            memoDetailTitle.clearFocus()
+            memoDetailDescription.clearFocus()
             memoDetailViewModel.setReadMode(receivedId)
         }
 

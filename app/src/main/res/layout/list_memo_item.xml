@@ -34,6 +34,8 @@
             android:textSize="@dimen/font_32"
             android:layout_marginStart="@dimen/fix_8"
             android:text="@{memo.memoTitle}"
+            android:maxLines="1"
+            android:ellipsize="end"
             app:layout_constraintStart_toEndOf="@id/memoThumb"
             app:layout_constraintTop_toTopOf="@id/memoThumb"
             app:layout_constraintBottom_toTopOf="@id/memoDescription" />
@@ -44,6 +46,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/fix_2"
             android:textSize="@dimen/font_16"
+            android:maxLines="3"
+            android:ellipsize="end"
             android:text="@{memo.memoDescription}"
             app:layout_constraintStart_toStartOf="@id/memoTitle"
             app:layout_constraintTop_toBottomOf="@id/memoTitle"

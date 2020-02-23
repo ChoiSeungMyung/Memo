@@ -10,5 +10,5 @@ fun Activity.createFile(): File? {
     val fileName = "line_${System.currentTimeMillis()}"
     val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
-    return File.createTempFile(fileName, ".jpg", storageDir)
+    return File.createTempFile(fileName, ".png", storageDir)
 }
