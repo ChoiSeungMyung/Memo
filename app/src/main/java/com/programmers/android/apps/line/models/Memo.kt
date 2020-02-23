@@ -13,5 +13,5 @@ data class Memo(
     @ColumnInfo(name = "memoImages") var memoImages: List<String?> = listOf()
 ) {
     @PrimaryKey @ColumnInfo(name = "memoId")
-    var memoId:String = UUID.randomUUID().toString()
+    var memoId:String = System.currentTimeMillis().toString()
 }

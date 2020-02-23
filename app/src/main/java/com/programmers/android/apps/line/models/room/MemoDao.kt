@@ -13,7 +13,7 @@ interface MemoDao {
     @Delete
     suspend fun deleteMemo(vararg memo: Memo)
 
-    @Query("SELECT * FROM $DB_TABLE_MEMO ORDER BY memoId")
+    @Query("SELECT * FROM $DB_TABLE_MEMO ORDER BY memoId DESC")
     fun getAllMemos(): LiveData<List<Memo>>
 
     @Query("SELECT * FROM $DB_TABLE_MEMO WHERE memoId = :id")

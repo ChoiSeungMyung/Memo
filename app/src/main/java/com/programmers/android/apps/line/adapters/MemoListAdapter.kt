@@ -3,13 +3,15 @@ package com.programmers.android.apps.line.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.programmers.android.apps.line.R
 import com.programmers.android.apps.line.adapters.viewholders.MemoItemClick
 import com.programmers.android.apps.line.adapters.viewholders.MemoListViewHolder
 import com.programmers.android.apps.line.models.Memo
 
-class MemoListAdapter(private val listener: MemoItemClick) : RecyclerView.Adapter<MemoListViewHolder>() {
+class MemoListAdapter(private val listener: MemoItemClick) : ListAdapter<Memo, MemoListViewHolder>(MemoDiffCallBack()) {
     var memoList: List<Memo> = emptyList()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemoListViewHolder =
         MemoListViewHolder(
@@ -27,4 +29,10 @@ class MemoListAdapter(private val listener: MemoItemClick) : RecyclerView.Adapte
         val memo = memoList[position]
         holder.apply { bind(listener, memo) }
     }
+}
+
+class MemoDiffCallBack: DiffUtil.ItemCallback<Memo>() {
+    override fun areItemsTheSame(oldItem: Memo, newItem: Memo): Boolean = oldItem == newItem
+
+    override fun areContentsTheSame(oldItem: Memo, newItem: Memo): Boolean = oldItem == newItem
 }

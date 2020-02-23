@@ -13,7 +13,7 @@ import com.programmers.android.apps.line.viewmodels.MemoDetailViewModel
 class MemoImagesAdapter(
     private val context: Context,
     private val viewModel: MemoDetailViewModel
-) : ListAdapter<String ,ImagesListViewHolder>(MemoDiffCallBack()) {
+) : ListAdapter<String ,ImagesListViewHolder>(MemoImagesDiffCallBack()) {
     var images = arrayListOf<String?>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImagesListViewHolder =
         ImagesListViewHolder(
@@ -34,7 +34,7 @@ class MemoImagesAdapter(
     }
 }
 
-class MemoDiffCallBack: DiffUtil.ItemCallback<String>() {
+class MemoImagesDiffCallBack: DiffUtil.ItemCallback<String>() {
     override fun areItemsTheSame(oldItem: String, newItem: String): Boolean = oldItem ==  newItem
 
     override fun areContentsTheSame(oldItem: String, newItem: String): Boolean = oldItem == newItem
