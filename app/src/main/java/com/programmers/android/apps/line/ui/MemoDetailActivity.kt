@@ -61,7 +61,8 @@ class MemoDetailActivity : AppCompatActivity(), View.OnClickListener {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initView()
+        setSupportActionBar(toolbar)
+        btnMemoImageAdd.setOnClickListener(this)
         val binding: ActivityMemoDetailBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_memo_detail)
 
@@ -82,11 +83,6 @@ class MemoDetailActivity : AppCompatActivity(), View.OnClickListener {
                 memoDetailViewModel.setReadMode(it)
             }
         }
-    }
-
-    private fun initView() {
-        setSupportActionBar(toolbar)
-        btnMemoImageAdd.setOnClickListener(this)
     }
 
     override fun onClick(view: View?) {
