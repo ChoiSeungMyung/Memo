@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/fix_8"
-        android:background="@drawable/bottom_border"
+        android:background="@drawable/border_bottom"
         android:onClick="@{clickListener}">
         <ImageView
             android:id="@+id/memoThumb"

@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -19,6 +20,7 @@ import com.programmers.android.apps.line.databinding.ActivityMemoDetailBinding
 import com.programmers.android.apps.line.extensions.createFile
 import com.programmers.android.apps.line.models.MemoImage
 import com.programmers.android.apps.line.ui.views.ImageAddDialog
+import com.programmers.android.apps.line.utilities.PermissionUtil
 import com.programmers.android.apps.line.viewmodels.MemoDetailViewModel
 import kotlinx.android.synthetic.main.activity_memo_detail.*
 import kotlinx.android.synthetic.main.dialog_image_add.*
@@ -55,6 +57,9 @@ class MemoDetailActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    /**
+     * Activity가 생성 될 때 intent로 전달된 id가 있다면 읽기 모드로 전환
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding: ActivityMemoDetailBinding =
@@ -64,7 +69,7 @@ class MemoDetailActivity : AppCompatActivity(), View.OnClickListener {
         memoDetailViewModel = ViewModelProvider(this).get(MemoDetailViewModel::class.java)
         binding.detailViewmodel = memoDetailViewModel
 
-        memoImagesRecyclerView.apply { adapter = memoDetailViewModel.memoImagesAdapter }
+        memoImagesRecyclerView.adapter = memoDetailViewModel.memoImagesAdapter
 
         memoDetailViewModel.images.observe(this, Observer { imageList ->
             memoDetailViewModel.memoImagesAdapter.images = imageList
@@ -81,7 +86,8 @@ class MemoDetailActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(view: View?) {
         when (view) {
-            btnMemoImageAdd -> imageAddDialog = ImageAddDialog.Builder(this, dialogClickListener).show()
+            btnMemoImageAdd -> imageAddDialog =
+                ImageAddDialog.Builder(this, dialogClickListener).show()
         }
     }
 
@@ -96,41 +102,72 @@ class MemoDetailActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    /**
+     * 다이얼로그에서 어떤 이벤트가 발생햇는지에 따라 다른 동작을 함
+     *
+     * 카메라, 외부저장소 접근 권한이 필요하므로 권한체크 추가
+     */
     private val dialogClickListener = object : ImageAddDialog.ImageAddDialogClickListener {
         override fun onclick(id: Int?) {
             when (id) {
                 R.id.btnTakePicture -> {
-                    Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { intent ->
-                        intent.resolveActivity(packageManager)?.also {
-                            val photoFile: File? = try {
-                                createFile()
-                            } catch (e: IOException) {
-                                null
-                            }
+                    when (PermissionUtil.permissionsAllGranted(this@MemoDetailActivity)) {
+                        true -> { // 권한 승인 -> 카메라로 찍은 사진 가져오기
+                            Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { intent ->
+                                intent.resolveActivity(packageManager)?.also {
+                                    val photoFile: File? = try {
+                                        createFile()
+                                    } catch (e: IOException) {
+                                        null
+                                    }
 
-                            photoFile?.also {
-                                photoUri = FileProvider.getUriForFile(
-                                    this@MemoDetailActivity,
-                                    PACKAGE_NAME,
-                                    it
-                                )
-                                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
-                                startActivityForResult(intent, IMAGE_FROM_CAMERA)
+                                    photoFile?.also {
+                                        photoUri = FileProvider.getUriForFile(
+                                            this@MemoDetailActivity,
+                                            PACKAGE_NAME,
+                                            it
+                                        )
+                                        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+                                        startActivityForResult(intent, IMAGE_FROM_CAMERA)
+                                    }
+                                }
                             }
+                        }
+                        false -> { // 권한 거절 -> 권한 요청
+                            ActivityCompat.requestPermissions(
+                                this@MemoDetailActivity,
+                                PermissionUtil.REQUIRED_ALL_PERMISSIONS,
+                                PermissionUtil.REQUEST_CODE_PERMISSIONS
+                            )
                         }
                     }
                 }
 
                 R.id.btnPickGallery -> {
-                    startActivityForResult(
-                        Intent.createChooser(
-                            Intent(Intent.ACTION_OPEN_DOCUMENT)
-                                .setType("image/*")
-                            , getString(R.string.memo_image_add_hint)
-                        ), IMAGE_FROM_GALLERY
-                    )
+                    when (PermissionUtil.permissionStorageGranted(this@MemoDetailActivity)) {
+                        true -> { // 권한승인 -> 외부저장소에서 사진 가져오기, Intent.ACTION_OPEN_DOCUMENT 플래그를 이용해 지속 사용 가능한 uri 추출
+                            startActivityForResult(
+                                Intent.createChooser(
+                                    Intent(Intent.ACTION_OPEN_DOCUMENT)
+                                        .setType("image/*")
+                                    , getString(R.string.memo_image_add_hint)
+                                ), IMAGE_FROM_GALLERY
+                            )
+                        }
+
+                        false -> {
+                            ActivityCompat.requestPermissions(
+                                this@MemoDetailActivity,
+                                PermissionUtil.REQUIRED_STORAGE_PERMISSION,
+                                PermissionUtil.REQUEST_CODE_PERMISSIONS
+                            )
+                        }
+                    }
                 }
 
+                /**
+                 * url입력란이 비어있지 않다면 url입력으로 판단
+                 */
                 R.id.btnDialogOk -> {
                     imageAddDialog?.let {
                         if (imageAddDialog?.btnWriteUrl?.text!!.isNotEmpty()) {

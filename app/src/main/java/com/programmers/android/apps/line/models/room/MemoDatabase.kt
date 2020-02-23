@@ -1,18 +1,15 @@
 package com.programmers.android.apps.line.models.room
 
 import android.content.Context
-import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.programmers.android.apps.line.DB_NAME
 import com.programmers.android.apps.line.models.Memo
 import com.programmers.android.apps.line.models.MemoImage
 
-@Database(entities = [Memo::class], version = 3, exportSchema = false)
+@Database(entities = [Memo::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class MemoDatabase : RoomDatabase() {
-
     abstract fun memoDao(): MemoDao
 
     companion object {

@@ -1,9 +1,7 @@
 package com.programmers.android.apps.line.viewmodels
 
 import android.app.Application
-import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData

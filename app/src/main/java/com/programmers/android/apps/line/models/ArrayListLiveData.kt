@@ -2,6 +2,11 @@ package com.programmers.android.apps.line.models
 
 import androidx.lifecycle.MutableLiveData
 
+/**
+ * MutableLiveData<>()를 ArrayList처럼 쓰기 위해 만든 클래스
+ *
+ * 각 메소드마다 value 변경후 set
+ */
 class ArrayListLiveData<T>() : MutableLiveData<ArrayList<T>>() {
     init {
         value = ArrayList()
@@ -13,38 +18,16 @@ class ArrayListLiveData<T>() : MutableLiveData<ArrayList<T>>() {
         value = items
     }
 
-    fun addAll(list: List<T>) {
-        val items = value
-        items?.addAll(list)
-        value = items
-    }
-
     fun replaceAll(list: List<T>) {
         val items = value
         items?.clear()
         items?.addAll(list)
         value = items
     }
-    fun clear(notify: Boolean) {
-        val items = value
-        items?.clear()
-        if (notify) value = items
-    }
-
-    fun remove(item: T) {
-        val items = value
-        items?.remove(item)
-        value = items
-    }
 
     fun removeAt(index: Int) {
         val items = value
         items?.removeAt(index)
-        value = items
-    }
-
-    fun notifyChange() {
-        val items = value
         value = items
     }
 }

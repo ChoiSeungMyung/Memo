@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Line</string>
+
+    <!-- Appbar Action Description -->
     <string name="action_delete_all">Delete All</string>
     <string name="action_delete">Delete</string>
     <string name="action_modify">Modify</string>
@@ -13,11 +15,10 @@
     <!-- btn description-->
     <string name="btn_take_picture">Take a picture</string>
     <string name="btn_pick_gallery">Choose from Gallery</string>
-    <string name="btn_write_url">Enter Url</string>
+    <string name="btn_write_url">Enter Url("http(s)://")</string>
     <string name="btn_cancel">Cancel</string>
     <string name="btn_ok">OK</string>
 
     <!-- toast message -->
     <string name="toast_image_load_fail">Failed to retrieve image</string>
-    <string name="toast_glide_error">Please re-write it from the beginning</string>
 </resources>

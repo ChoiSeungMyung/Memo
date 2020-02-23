@@ -14,7 +14,7 @@ import com.programmers.android.apps.line.models.MemoRepository
 import com.programmers.android.apps.line.models.room.MemoDatabase
 
 class MemoDetailViewModel(application: Application) : AndroidViewModel(application) {
-    enum class Mode {
+    private enum class Mode {
         WRITE, READ, MODIFY
     }
 
@@ -22,7 +22,7 @@ class MemoDetailViewModel(application: Application) : AndroidViewModel(applicati
 
     var hasInit: Boolean = false
 
-    var mode = Mode.WRITE
+    private var mode = Mode.WRITE
     private val isRead: Boolean
         get() = mode == Mode.READ
 
@@ -32,7 +32,7 @@ class MemoDetailViewModel(application: Application) : AndroidViewModel(applicati
     var description: ObservableField<String> = ObservableField()
     var images: ArrayListLiveData<MemoImage?> = ArrayListLiveData()
 
-    var memo: Memo? = null
+    private var memo: Memo? = null
 
     val memoImagesAdapter = MemoImagesAdapter(getApplication(), this)
 
@@ -43,6 +43,16 @@ class MemoDetailViewModel(application: Application) : AndroidViewModel(applicati
 
     fun imageRemoveAt(position: Int) = images.removeAt(position)
 
+    /**
+     * setReadMode()를 통해 읽기모드로 전환
+     * @param receivedId = 리스트액티비티에서 선택된 아이템의 Id
+     *
+     * hasInit = 화면 회전시 액티비티 라이프사이클에 memo의 내용이 초기화 되는걸 방지하기 위한 플래그
+     * mode = 읽기 모드
+     * images에 저장되어 있는 image들에게 수정 될 수 없음을 알림
+     *
+     * title, description, images - memo에 저장되어있는 데이터로 갱신시키기
+     */
     fun setReadMode(receivedId: Int) {
         hasInit = true
         memo = repository.getMemo(receivedId)
@@ -54,6 +64,12 @@ class MemoDetailViewModel(application: Application) : AndroidViewModel(applicati
         images.value?.forEach { it?.deletable = isReadObservable.get() }
     }
 
+    /**
+     * setModifyMode()를 통해 수정모드로 전환
+     *
+     * mode = 수정 모드
+     * images에 저장되어있는 image들에게 수정 될수 있음을 알림
+     */
     fun setModifyMode() {
         mode = Mode.MODIFY
         isReadObservable.set(isRead)
@@ -61,16 +77,23 @@ class MemoDetailViewModel(application: Application) : AndroidViewModel(applicati
         memoImagesAdapter.notifyDataSetChanged()
     }
 
+    /**
+     * MemoListActivity View에서 발생한 OK버튼 클릭이벤트 처리
+     *
+     */
     fun okAction(context: Context) {
         when (mode) {
+            // 작성 모드 - 새로운 Memo 객체 생성후 Room에 넣어주기 : NPE 체크
             Mode.WRITE -> {
                 val memo = Memo(
                     title.get() ?: "",
                     description.get() ?: "",
                     images.value?.toList() ?: emptyList()
                 )
-                repository.insertMemo(memo)
+                if (!memo.memoTitle.isBlank() || !memo.memoDescription.isBlank() || memo.memoImages.isNotEmpty())
+                    repository.insertMemo(memo)
             }
+            // 수정 모드 - 불러온 Memo의 내용을 바꾼후 repository를 통해 Room에게 업데이트를 알림
             Mode.MODIFY -> {
                 memo?.apply {
                     memoTitle = title.get() ?: ""
@@ -79,9 +102,7 @@ class MemoDetailViewModel(application: Application) : AndroidViewModel(applicati
                 }
                 repository.modifyMemo(memo!!)
             }
-            Mode.READ -> {
-
-            }
+            else -> {}
         }
         (context as Activity).finish()
     }

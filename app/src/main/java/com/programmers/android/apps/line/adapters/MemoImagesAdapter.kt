@@ -7,14 +7,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.programmers.android.apps.line.R
-import com.programmers.android.apps.line.adapters.viewholders.ImageClickListener
 import com.programmers.android.apps.line.adapters.viewholders.ImagesListViewHolder
 import com.programmers.android.apps.line.models.MemoImage
 import com.programmers.android.apps.line.viewmodels.MemoDetailViewModel
 
 class MemoImagesAdapter(
     private val context: Context,
-//    private val listener: ImageClickListener
     private val viewModel: MemoDetailViewModel
 ) : ListAdapter<MemoImage ,ImagesListViewHolder>(MemoDiffCallBack()) {
     var images = arrayListOf<MemoImage?>()

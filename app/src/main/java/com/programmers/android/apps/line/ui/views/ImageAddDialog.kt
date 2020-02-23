@@ -8,7 +8,7 @@ import android.view.View
 import com.programmers.android.apps.line.R
 import kotlinx.android.synthetic.main.dialog_image_add.*
 
-class ImageAddDialog(context: Context, private val listenerImageAdd: ImageAddDialogClickListener): Dialog(context), View.OnClickListener {
+class ImageAddDialog(context: Context, private val listener: ImageAddDialogClickListener): Dialog(context), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_image_add)
@@ -25,7 +25,7 @@ class ImageAddDialog(context: Context, private val listenerImageAdd: ImageAddDia
     }
 
     override fun onClick(view: View?) {
-        listenerImageAdd.onclick(view?.id)
+        listener.onclick(view?.id)
         this.dismiss()
     }
 

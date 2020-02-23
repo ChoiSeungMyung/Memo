@@ -1,7 +1,6 @@
 package com.programmers.android.apps.line.models.room
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 import com.programmers.android.apps.line.DB_TABLE_MEMO
 import com.programmers.android.apps.line.models.Memo

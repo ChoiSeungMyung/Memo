@@ -1,16 +1,18 @@
 package com.programmers.android.apps.line.models
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.programmers.android.apps.line.DB_TABLE_MEMO
+import java.util.*
 
 @Entity(tableName = DB_TABLE_MEMO)
 data class Memo(
-    var memoTitle: String,
-    var memoDescription: String,
-    var memoImages: List<MemoImage?> = listOf()
-//    var memoImages: MutableLiveData<ArrayList<String?>>
+    @ColumnInfo(name = "memoTitle") var memoTitle: String,
+    @ColumnInfo(name = "memoDescription") var memoDescription: String,
+    @ColumnInfo(name = "memoImages") var memoImages: List<MemoImage?> = listOf()
 ) {
     @PrimaryKey(autoGenerate = true)
-    var memoId: Int = 0
+    @ColumnInfo(name = "memoId")
+    var memoId:Int = 0
 }
