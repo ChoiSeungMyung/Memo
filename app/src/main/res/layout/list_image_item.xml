@@ -12,9 +12,6 @@
             type="android.view.View.OnClickListener" />
 
         <variable
-            name="memoImage"
-            type="com.programmers.android.apps.line.models.MemoImage" />
-        <variable
             name="viewModel"
             type="com.programmers.android.apps.line.viewmodels.MemoDetailViewModel" />
     </data>
@@ -41,7 +38,7 @@
             android:layout_height="wrap_content"
             android:onClick="@{deleteClickListener}"
             android:src="@drawable/ic_image_delete"
-            android:visibility="@{memoImage.deletable ? View.GONE : View.VISIBLE}"
+            android:visibility="@{viewModel.isReadObservable() ? View.GONE : View.VISIBLE}"
             app:layout_constraintEnd_toEndOf="@id/imageThumb"
             app:layout_constraintStart_toEndOf="@id/imageThumb"
             app:layout_constraintTop_toTopOf="@id/imageThumb" />

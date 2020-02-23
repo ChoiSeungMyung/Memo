@@ -12,9 +12,7 @@ import com.bumptech.glide.request.target.Target
 import com.google.android.material.snackbar.Snackbar
 import com.programmers.android.apps.line.R
 import com.programmers.android.apps.line.databinding.ListImageItemBinding
-import com.programmers.android.apps.line.extensions.loge
 import com.programmers.android.apps.line.extensions.showSnackBar
-import com.programmers.android.apps.line.models.MemoImage
 import com.programmers.android.apps.line.ui.views.ImageViewDialog
 import com.programmers.android.apps.line.viewmodels.MemoDetailViewModel
 import kotlinx.android.synthetic.main.list_image_item.view.*
@@ -24,12 +22,12 @@ class ImagesListViewHolder(
     private val binding: ListImageItemBinding
 ) :
     RecyclerView.ViewHolder(binding.root) {
-    fun bind(viewModel: MemoDetailViewModel, memoImage: MemoImage?, position: Int) {
-        binding.memoImage = memoImage
+    fun bind(viewModel: MemoDetailViewModel, imageUri: String?, position: Int) {
+        binding.viewModel = viewModel
         binding.apply {
-            memoImage?.let {
+            imageUri?.let {
                 Glide.with(context)
-                    .load(memoImage.imageUrl)
+                    .load(imageUri)
                     .centerCrop()
                     .listener(object : RequestListener<Drawable> {
                         override fun onLoadFailed(
@@ -64,7 +62,7 @@ class ImagesListViewHolder(
 
             viewClickListener = View.OnClickListener {
                 ImageViewDialog.Builder(
-                    it.context, memoImage?.imageUrl
+                    it.context, imageUri
                 ).show()
             }
         }

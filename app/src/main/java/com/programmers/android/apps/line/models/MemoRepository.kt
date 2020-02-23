@@ -14,7 +14,7 @@ import kotlinx.coroutines.runBlocking
  */
 class MemoRepository internal constructor(private val dao: MemoDao) {
     fun getAllMemos() = runBlocking(context = Dispatchers.Default){dao.getAllMemos()}
-    fun getMemo(id: Int): Memo = runBlocking(context = Dispatchers.Default) { dao.getMemo(id) }
+    fun getMemo(id: String): Memo = runBlocking(context = Dispatchers.Default) { dao.getMemo(id) }
     fun insertMemo(memo: Memo) = CoroutineScope(Dispatchers.Default).launch { dao.insertMemo(memo) }
     fun deleteMemo(vararg memo: Memo) = CoroutineScope(Dispatchers.Default).launch { dao.deleteMemo(*memo) }
     fun modifyMemo(memo: Memo) = CoroutineScope(Dispatchers.Default).launch { dao.modifyMemo(memo) }

@@ -18,7 +18,6 @@ import com.programmers.android.apps.line.PACKAGE_NAME
 import com.programmers.android.apps.line.R
 import com.programmers.android.apps.line.databinding.ActivityMemoDetailBinding
 import com.programmers.android.apps.line.extensions.createFile
-import com.programmers.android.apps.line.models.MemoImage
 import com.programmers.android.apps.line.ui.views.ImageAddDialog
 import com.programmers.android.apps.line.utilities.PermissionUtil
 import com.programmers.android.apps.line.viewmodels.MemoDetailViewModel
@@ -62,9 +61,9 @@ class MemoDetailActivity : AppCompatActivity(), View.OnClickListener {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initView()
         val binding: ActivityMemoDetailBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_memo_detail)
-        setSupportActionBar(toolbar)
 
         memoDetailViewModel = ViewModelProvider(this).get(MemoDetailViewModel::class.java)
         binding.detailViewmodel = memoDetailViewModel
@@ -76,13 +75,17 @@ class MemoDetailActivity : AppCompatActivity(), View.OnClickListener {
             memoDetailViewModel.memoImagesAdapter.notifyDataSetChanged()
         })
 
-        val receivedId = intent.getIntExtra("id", -1)
-        if (receivedId != -1 && !memoDetailViewModel.hasInit) {
-            memoDetailTitle.clearFocus()
-            memoDetailDescription.clearFocus()
-            memoDetailViewModel.setReadMode(receivedId)
+        intent.getStringExtra("id")?.let {
+            if (!memoDetailViewModel.hasInit) {
+                memoDetailTitle.clearFocus()
+                memoDetailDescription.clearFocus()
+                memoDetailViewModel.setReadMode(it)
+            }
         }
+    }
 
+    private fun initView() {
+        setSupportActionBar(toolbar)
         btnMemoImageAdd.setOnClickListener(this)
     }
 
@@ -97,11 +100,19 @@ class MemoDetailActivity : AppCompatActivity(), View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                IMAGE_FROM_CAMERA -> photoUri?.let { memoDetailViewModel.images.add(MemoImage(it.toString())) }
+                IMAGE_FROM_CAMERA -> photoUri?.let { memoDetailViewModel.images.add(it.toString()) }
 
-                IMAGE_FROM_GALLERY -> data?.data?.let { memoDetailViewModel.images.add(MemoImage(it.toString())) }
+                IMAGE_FROM_GALLERY -> data?.data?.let { memoDetailViewModel.images.add(it.toString()) }
             }
         }
+    }
+
+    private fun getPermission(permissions: Array<String>) {
+        ActivityCompat.requestPermissions(
+            this,
+            permissions,
+            PermissionUtil.REQUEST_CODE_PERMISSIONS
+        )
     }
 
     /**
@@ -119,9 +130,7 @@ class MemoDetailActivity : AppCompatActivity(), View.OnClickListener {
                                 intent.resolveActivity(packageManager)?.also {
                                     val photoFile: File? = try {
                                         createFile()
-                                    } catch (e: IOException) {
-                                        null
-                                    }
+                                    } catch (e: IOException) { null }
 
                                     photoFile?.also {
                                         photoUri = FileProvider.getUriForFile(
@@ -135,35 +144,23 @@ class MemoDetailActivity : AppCompatActivity(), View.OnClickListener {
                                 }
                             }
                         }
-                        false -> { // 권한 거절 -> 권한 요청
-                            ActivityCompat.requestPermissions(
-                                this@MemoDetailActivity,
-                                PermissionUtil.REQUIRED_ALL_PERMISSIONS,
-                                PermissionUtil.REQUEST_CODE_PERMISSIONS
-                            )
-                        }
+                        false -> getPermission(PermissionUtil.REQUIRED_ALL_PERMISSIONS) // 권한 거절 -> 권한 요청
                     }
                 }
 
                 R.id.btnPickGallery -> {
                     when (PermissionUtil.permissionStorageGranted(this@MemoDetailActivity)) {
                         true -> { // 권한승인 -> 외부저장소에서 사진 가져오기, Intent.ACTION_OPEN_DOCUMENT 플래그를 이용해 지속 사용 가능한 uri 추출
+                            val intent =
+                                Intent(Intent.ACTION_OPEN_DOCUMENT).apply { type = "image/*" }
                             startActivityForResult(
                                 Intent.createChooser(
-                                    Intent(Intent.ACTION_OPEN_DOCUMENT)
-                                        .setType("image/*")
-                                    , getString(R.string.memo_image_add_hint)
+                                    intent, getString(R.string.memo_image_add_hint)
                                 ), IMAGE_FROM_GALLERY
                             )
                         }
 
-                        false -> {
-                            ActivityCompat.requestPermissions(
-                                this@MemoDetailActivity,
-                                PermissionUtil.REQUIRED_STORAGE_PERMISSION,
-                                PermissionUtil.REQUEST_CODE_PERMISSIONS
-                            )
-                        }
+                        false -> getPermission(PermissionUtil.REQUIRED_STORAGE_PERMISSION)
                     }
                 }
 
@@ -173,7 +170,7 @@ class MemoDetailActivity : AppCompatActivity(), View.OnClickListener {
                 R.id.btnDialogOk -> {
                     imageAddDialog?.let {
                         if (imageAddDialog?.btnWriteUrl?.text!!.isNotEmpty()) {
-                            memoDetailViewModel.images.add(MemoImage(imageAddDialog?.btnWriteUrl?.text!!.toString()))
+                            memoDetailViewModel.images.add(imageAddDialog?.btnWriteUrl?.text!!.toString())
                         }
                     }
                 }

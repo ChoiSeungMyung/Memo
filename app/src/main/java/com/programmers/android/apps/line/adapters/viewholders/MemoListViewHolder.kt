@@ -16,7 +16,7 @@ class MemoListViewHolder(private val binding: ListMemoItemBinding) :
             if (item.memoImages.isNotEmpty()) {
 //                이미지가 있을때 첫번째 사진으로 썸네일 보여주기
                 Glide.with(binding.root)
-                    .load(item.memoImages[0]?.imageUrl)
+                    .load(item.memoImages[0])
                     .centerCrop()
                     .placeholder(R.drawable.sale_11)
                     .error(R.drawable.ic_error_image)
@@ -40,5 +40,5 @@ class MemoListViewHolder(private val binding: ListMemoItemBinding) :
 }
 
 interface MemoItemClick {
-    fun onClick(id: Int)
+    fun onClick(id: String)
 }

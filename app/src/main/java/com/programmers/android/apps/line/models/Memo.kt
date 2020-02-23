@@ -10,9 +10,8 @@ import java.util.*
 data class Memo(
     @ColumnInfo(name = "memoTitle") var memoTitle: String,
     @ColumnInfo(name = "memoDescription") var memoDescription: String,
-    @ColumnInfo(name = "memoImages") var memoImages: List<MemoImage?> = listOf()
+    @ColumnInfo(name = "memoImages") var memoImages: List<String?> = listOf()
 ) {
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "memoId")
-    var memoId:Int = 0
+    @PrimaryKey @ColumnInfo(name = "memoId")
+    var memoId:String = UUID.randomUUID().toString()
 }

@@ -8,14 +8,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.programmers.android.apps.line.R
 import com.programmers.android.apps.line.adapters.viewholders.ImagesListViewHolder
-import com.programmers.android.apps.line.models.MemoImage
 import com.programmers.android.apps.line.viewmodels.MemoDetailViewModel
 
 class MemoImagesAdapter(
     private val context: Context,
     private val viewModel: MemoDetailViewModel
-) : ListAdapter<MemoImage ,ImagesListViewHolder>(MemoDiffCallBack()) {
-    var images = arrayListOf<MemoImage?>()
+) : ListAdapter<String ,ImagesListViewHolder>(MemoDiffCallBack()) {
+    var images = arrayListOf<String?>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImagesListViewHolder =
         ImagesListViewHolder(
             context,
@@ -30,17 +29,13 @@ class MemoImagesAdapter(
     override fun getItemCount(): Int = images.size
 
     override fun onBindViewHolder(holder: ImagesListViewHolder, position: Int) {
-        val memoImage = images[position]
-        holder.bind(viewModel, memoImage, position)
+        val imageUri = images[position]
+        holder.bind(viewModel, imageUri, position)
     }
 }
 
-class MemoDiffCallBack: DiffUtil.ItemCallback<MemoImage>() {
-    override fun areItemsTheSame(oldItem: MemoImage, newItem: MemoImage): Boolean {
-        return oldItem.imageUrl ==  newItem.imageUrl
-    }
+class MemoDiffCallBack: DiffUtil.ItemCallback<String>() {
+    override fun areItemsTheSame(oldItem: String, newItem: String): Boolean = oldItem ==  newItem
 
-    override fun areContentsTheSame(oldItem: MemoImage, newItem: MemoImage): Boolean {
-        return oldItem == newItem
-    }
+    override fun areContentsTheSame(oldItem: String, newItem: String): Boolean = oldItem == newItem
 }

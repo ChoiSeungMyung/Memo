@@ -17,7 +17,7 @@ interface MemoDao {
     fun getAllMemos(): LiveData<List<Memo>>
 
     @Query("SELECT * FROM $DB_TABLE_MEMO WHERE memoId = :id")
-    suspend fun getMemo(id: Int): Memo
+    suspend fun getMemo(id: String): Memo
 
     @Update
     suspend fun modifyMemo(memo: Memo)

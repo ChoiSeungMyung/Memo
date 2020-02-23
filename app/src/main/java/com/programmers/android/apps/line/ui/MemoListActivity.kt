@@ -22,12 +22,12 @@ class MemoListActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initView()
+
         memosListViewModel = ViewModelProvider(this).get(MemoListViewModel::class.java)
         val binding: ActivityMemoListBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_memo_list)
         binding.memoListViewModel = memosListViewModel
-        setSupportActionBar(toolbar)
-        fab.setOnClickListener(this)
         memoListAdapter = MemoListAdapter(memoItemClickListener)
 
         memosListViewModel.allMemos.observe(this, Observer { memos ->
@@ -36,6 +36,11 @@ class MemoListActivity : AppCompatActivity(), View.OnClickListener {
         })
 
         memoRecyclerView.adapter = memoListAdapter
+    }
+
+    private fun initView() {
+        setSupportActionBar(toolbar)
+        fab.setOnClickListener(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -67,7 +72,7 @@ class MemoListActivity : AppCompatActivity(), View.OnClickListener {
      * MemoDetatilActivity는 intent에 저장되어있는 정보를 통해 작성모드인지 읽기모드인지 판단
      */
     private val memoItemClickListener = object : MemoItemClick {
-        override fun onClick(id: Int) {
+        override fun onClick(id: String) {
             memosListViewModel.callActivity(
                 Intent(
                     this@MemoListActivity,

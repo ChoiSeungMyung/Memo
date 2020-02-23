@@ -9,7 +9,6 @@ import androidx.lifecycle.AndroidViewModel
 import com.programmers.android.apps.line.adapters.MemoImagesAdapter
 import com.programmers.android.apps.line.models.ArrayListLiveData
 import com.programmers.android.apps.line.models.Memo
-import com.programmers.android.apps.line.models.MemoImage
 import com.programmers.android.apps.line.models.MemoRepository
 import com.programmers.android.apps.line.models.room.MemoDatabase
 
@@ -30,7 +29,7 @@ class MemoDetailViewModel(application: Application) : AndroidViewModel(applicati
 
     var title: ObservableField<String> = ObservableField()
     var description: ObservableField<String> = ObservableField()
-    var images: ArrayListLiveData<MemoImage?> = ArrayListLiveData()
+    var images: ArrayListLiveData<String?> = ArrayListLiveData()
 
     private var memo: Memo? = null
 
@@ -53,15 +52,14 @@ class MemoDetailViewModel(application: Application) : AndroidViewModel(applicati
      *
      * title, description, images - memo에 저장되어있는 데이터로 갱신시키기
      */
-    fun setReadMode(receivedId: Int) {
+    fun setReadMode(receivedId: String) {
         hasInit = true
         memo = repository.getMemo(receivedId)
         mode = Mode.READ
         isReadObservable.set(isRead)
         title.set(memo?.memoTitle)
         description.set(memo?.memoDescription)
-        images.replaceAll(memo!!.memoImages)
-        images.value?.forEach { it?.deletable = isReadObservable.get() }
+        images.value?.addAll(memo!!.memoImages)
     }
 
     /**
@@ -73,12 +71,10 @@ class MemoDetailViewModel(application: Application) : AndroidViewModel(applicati
     fun setModifyMode() {
         mode = Mode.MODIFY
         isReadObservable.set(isRead)
-        images.value?.forEach { it?.deletable = isReadObservable.get() }
-        memoImagesAdapter.notifyDataSetChanged()
     }
 
     /**
-     * MemoListActivity View에서 발생한 OK버튼 클릭이벤트 처리
+     * MemoDetailActivity View에서 발생한 OK버튼 클릭이벤트 처리
      *
      */
     fun okAction(context: Context) {
